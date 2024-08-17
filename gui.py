@@ -354,7 +354,7 @@ class Gui(QWidget):
             with open(file_path, 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerows(rows)
-            self.update_table([("Success:", "Data exported to file successfully.")])
+            self.update_table([("Success", "Data exported to file successfully.")])
             self.data_exported_to_file = True  # Set the flag to True
             self.export_button.setEnabled(False)  # Disable the export to database button
     

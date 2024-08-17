@@ -4,8 +4,7 @@ from formatter import Formatter
 
 class PhotoMetadata:
     def __init__(self, file_path: str):
-        # file_path: the path to the photo file
-        self.file_path = file_path
+        self.file_path = file_path # file_path to the photo file
         self.formatter = Formatter()
 
     def extract_metadata(self):

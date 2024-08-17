@@ -87,20 +87,13 @@ class MetadataExtractor:
                     with self.lock:  # Synchronize cache update
                         self.cache[file_path] = metadata
                     return metadata
-                elif extractor == PhotoMetadata:
-                    photo_extractor = extractor(file_path)
-                    metadata = photo_extractor.extract_metadata()
-                    with self.lock:  
+                else:
+                    metadata_extractor = extractor(file_path)
+                    metadata = metadata_extractor.extract_metadata()
+                    with self.lock:  # Synchronize cache update
                         self.cache[file_path] = metadata
                     return metadata
-                elif extractor == DocumentMetadata:
-                    document_extractor = extractor(file_path)
-                    metadata = document_extractor.extract_metadata()
-                    with self.lock:  
-                        self.cache[file_path] = metadata
-                    return metadata
-            # Handle exceptions and cache error messages
-            except Exception as e:
+            except MetadataError as e:
                 raise MetadataError(f'Metadata Not Available')
         else:
             raise MetadataError(f"Unsupported file type: {file_extension}")
