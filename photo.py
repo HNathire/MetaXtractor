@@ -75,10 +75,7 @@ class PhotoMetadata:
             # Handle file reading errors
             print(f'Error reading file {self.file_path}: {e}')
             return "File Error"
-        except exifread.errors.ExifReadError as e:
-            # Handle EXIF parsing errors
-            print(f'Error parsing EXIF data from {self.file_path}: {e}')
-            return 'Metadata Not Available'
+        
         except Exception as e:
             # Handle unexpected errors
             print(f'An unexpected error occurred while extracting metadata from {self.file_path}: {e}')
