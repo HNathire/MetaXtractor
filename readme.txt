@@ -10,10 +10,8 @@ Features
 Supported File Format
     Images: '.mp4', '.avi', '.mov','.mkv'
     Documents: '.docx', '.pdf', .xlsx', '.pptx'
-    Videos: '.jpg', .jpeg', '.png'  
+    Videos: '.jpg', .jpeg', '.png', '.mpeg'  
 
-Requirements
-    Python 3.x, PyQt5, pymediainfo, exifread, cachetools, PyQt5, pikepdf, python-docx, openpyxl, python-pptx, firebase-admin
 
 Usage
     Run the application by executing python main.py
