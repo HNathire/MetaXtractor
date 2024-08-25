@@ -2,7 +2,7 @@ import os
 import concurrent.futures
 import cachetools
 import threading
-from document import DocumentMetadata, MetadataError
+from document import DocumentMetadata
 from photo import PhotoMetadata
 from video import VideoMetadata
 
@@ -31,7 +31,7 @@ class MetadataExtractor:
     def replace_none_with_default(metadata: dict) -> dict:
         """Replace None values with 'Not Available' and handle other types of metadata values"""
         if metadata is None:
-            raise MetadataError("Metadata Not Available")
+            return {}
         normalized_metadata = {}
         for key, value in metadata.items():
             if value is None:
@@ -56,9 +56,6 @@ class MetadataExtractor:
                 try:
                     metadata = future.result()
                     metadata_dict[file_path] = self.replace_none_with_default(metadata)
-                except MetadataError as e:
-                    metadata_dict[file_path] = {'error': str(e)}
-                    self.cache[file_path] = {'error': str(e)}  # Cache error message
                 except Exception as e:
                     metadata_dict[file_path] = {'error': str(e)}
                     self.cache[file_path] = {'error': str(e)}  
@@ -67,7 +64,7 @@ class MetadataExtractor:
     #Extract metadata from a single file
     def _extract_metadata(self, file_path: str) -> dict:
         if not os.path.exists(file_path):
-            raise MetadataError(f"File not found: {file_path}")
+            return {'error': f"File not found: {file_path}"}
 
         file_extension = os.path.splitext(file_path)[1].lower()
         # Check if metadata is cached
@@ -93,7 +90,7 @@ class MetadataExtractor:
                     with self.lock:  # Synchronize cache update
                         self.cache[file_path] = metadata
                     return metadata
-            except MetadataError as e:
-                raise MetadataError(f'Metadata Not Available')
+            except Exception as e:
+                return {'error': str(e)}
         else:
-            raise MetadataError(f"Unsupported file type: {file_extension}")
+            return {'error': f"Unsupported file type: {file_extension}"}

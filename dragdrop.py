@@ -92,13 +92,7 @@ class DragDropWidget(QWidget):
         
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
-            for url in event.mimeData().urls():
-                file_path = url.toLocalFile()
-                file_info = QFileInfo(file_path)
-                if file_info.suffix().lower() in ["docx", "pdf", "xlsx", "pptx", "mp4", "avi", "mov", "mkv", "mpeg", "jpg", "jpeg", "png"]:
-                    event.accept()
-                    return
-            event.ignore()
+            event.accept()
         else:
             event.ignore()
             
@@ -112,10 +106,13 @@ class DragDropWidget(QWidget):
     def dropEvent(self, event):
         files = []
         for url in event.mimeData().urls():
-            files.append(url.toLocalFile())
+            file_path = url.toLocalFile()
+            file_info = QFileInfo(file_path)
+            if file_info.suffix().lower() in ["docx", "pdf", "xlsx", "pptx", "mp4", "avi", "mov", "mkv", "mpeg", "jpg", "jpeg", "png"]:
+                files.append(file_path)
         for file in files:
             self.handle_file_upload(file)
-
+            
     def handle_file_upload(self, file_path):
         file_info = QFileInfo(file_path)
         file_name = file_info.fileName()
